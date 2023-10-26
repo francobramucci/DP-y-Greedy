@@ -49,10 +49,17 @@ int main(){
     //     cout << endl;
     // }
 
+    vector<int,int> pos;
 
     forr(i, 1, n){
         forr(j,1,n+1){
-            sub[i][j] = board[i][j] + min(sub[i-1][j], min(sub[i-1][j+1], sub[i-1][j-1]));
+            int mini = min(sub[i-1][j], sub[i-1][j+1], sub[i-1][j-1]);
+            
+            if(mini = sub[i-1][j-1]) pos.push_back((i-1, j-1));
+            if(mini = sub[i-1][j]) pos.push_back((i-1, j));
+            if(mini = sub[i-1][j+1]) pos.push_back((i-1, j+1));
+
+            sub[i][j] = board[i][j] + mini;
         }
     }
 
