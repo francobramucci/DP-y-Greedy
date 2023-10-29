@@ -28,7 +28,7 @@ int main()
         pos[{penalty[i], dead_line[i]}] = i;
     }
 
-    int scheduler[n];
+    vector<int> scheduler(n);
 
     bool box[n];
     memset(box, false, sizeof(box));
@@ -56,19 +56,19 @@ int main()
 
     //   cout<<"After Sorting"<<endl;
     //    for(int i=0; i<n; i++){
-    //       cout<<penalty[i]<<" "<<dead_line[i]<<endl;
+    //       cout<<penalty[i]<<" "<<dead_line[iint descartadas[n];]<<endl;
     //    }
     //    cout<<endl<<endl;
 
     for(int i=0; i<n; i++){
-        for(int j=min(n,dead_line[i]); j>=1; j--){
-            if(box[j]==false){
+        for(int j=min(n,dead_line[i]); j>=0; j--){
+            if(j == 0) scheduler.pb(pos[{penalty[i], dead_line[i]}]);
+            else if(box[j]==false){
                 box[j]=true;
                 scheduler[j] = pos[{penalty[i], dead_line[i]}];
                 maximum_penalty += penalty[i];
                 break;
             }
-            
         }
     }
     
@@ -78,7 +78,7 @@ int main()
     
     cout << "El scheduler que minimiza la penalidad es: " << endl;
     
-    forr(i,1,n){
+    forr(i,1,n*2){
         cout << scheduler[i] << endl;
     }
     
