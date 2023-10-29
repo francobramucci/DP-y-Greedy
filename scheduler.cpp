@@ -16,11 +16,11 @@ using ii = pair<int,int>;
 int main()
 {
     int penalty[1000], dead_line[1000];
-    int maximum_penalty=0, total_penalty, n, temp;
+    int maximum_penalty=0, total_penalty, n, temp, done=0;
     map<ii, int> pos;
 
-    cout<<"Ingresar cantidad de tareas: ";
-    cin>>n;
+    cout << "Ingresar cantidad de tareas: ";
+    cin >> n;
 
     forn(i,n){
         cin >> penalty[i] >> dead_line[i];
@@ -29,6 +29,7 @@ int main()
     }
 
     vector<int> scheduler(n);
+    vector<int> discarded;
 
     bool box[n];
     memset(box, false, sizeof(box));
@@ -54,19 +55,18 @@ int main()
         }
     }
 
-    //   cout<<"After Sorting"<<endl;
-    //    for(int i=0; i<n; i++){
-    //       cout<<penalty[i]<<" "<<dead_line[iint descartadas[n];]<<endl;
-    //    }
-    //    cout<<endl<<endl;
 
     for(int i=0; i<n; i++){
+        
+        int taskid = pos[{penalty[i], dead_line[i]}];
+
         for(int j=min(n,dead_line[i]); j>=0; j--){
-            if(j == 0) scheduler.pb(pos[{penalty[i], dead_line[i]}]);
+            if(j == 0) discarded.pb(taskid);
             else if(box[j]==false){
                 box[j]=true;
-                scheduler[j] = pos[{penalty[i], dead_line[i]}];
+                scheduler[j] = taskid;
                 maximum_penalty += penalty[i];
+                done++;
                 break;
             }
         }
@@ -78,8 +78,12 @@ int main()
     
     cout << "El scheduler que minimiza la penalidad es: " << endl;
     
-    forr(i,1,n*2){
+    forr(i,1,done+1){
         cout << scheduler[i] << endl;
+    }
+
+    forn(i, n-done){
+        cout << discarded[i] << endl;
     }
     
     return 0;
