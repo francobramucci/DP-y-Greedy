@@ -15,50 +15,72 @@ using ii = pair<int,int>;
 
 int main()
 {
-     int penalty[10], dead_line[10];
-     int maximum_penalty=0,n,temp;
-     
-     cout<<"Ingresar cantidad de casos: "<<endl;
-     
-     cin>>n;
+    int penalty[1000], dead_line[1000];
+    int maximum_penalty=0, total_penalty, n, temp;
+    map<ii, int> pos;
 
-     bool box[n];
-     
-     forn(i,n){
-        cin>>penalty[i]>>dead_line[i];
-     }
+    cout<<"Ingresar cantidad de tareas: ";
+    cin>>n;
 
-     for(int i=0; i<n-1; i++){
-       for(int j=i+1; j<n; j++)
+    forn(i,n){
+        cin >> penalty[i] >> dead_line[i];
+        total_penalty += penalty[i];
+        pos[{penalty[i], dead_line[i]}] = i;
+    }
 
-        if(penalty[i]<penalty[j]){
- 
-            temp = penalty[i];
-            penalty[i] = penalty[j];
-            penalty[j] = temp;
+    int scheduler[n];
 
-            temp = dead_line[i];
-            dead_line[i] = dead_line[j];
-            dead_line[j] = temp;
+    bool box[n];
+    memset(box, false, sizeof(box));
 
-         }
-     }
+    /*
+    *   Ordenamos todas las tareas según su penalidad en orden decreciente
+    */
 
-      cout<<"After Sorting"<<endl;
-       for(int i=0; i<n; i++){
-          cout<<penalty[i]<<" "<<dead_line[i]<<endl;
-       }
-       cout<<endl<<endl;
-       memset(box,false,sizeof(box));
-        for(int i=0; i<n; i++){
-            for(int j=min(n,dead_line[i])-1; j>=0; j--){
-                if(box[j]==false){
-                      box[j]=true;
-                maximum_penalty +=penalty[i];
-                  break;
-                }
+    forn(i,n){
+        for(int j=i+1; j<n; j++){
+
+            if(penalty[i] < penalty[j]){
+
+                temp = penalty[i];
+                penalty[i] = penalty[j];
+                penalty[j] = temp;
+
+                temp = dead_line[i];
+                dead_line[i] = dead_line[j];
+                dead_line[j] = temp;
+
             }
         }
-        cout<<"Maximum penalty: "<<maximum_penalty<<endl;
+    }
+
+    //   cout<<"After Sorting"<<endl;
+    //    for(int i=0; i<n; i++){
+    //       cout<<penalty[i]<<" "<<dead_line[i]<<endl;
+    //    }
+    //    cout<<endl<<endl;
+
+    for(int i=0; i<n; i++){
+        for(int j=min(n,dead_line[i]); j>=1; j--){
+            if(box[j]==false){
+                box[j]=true;
+                scheduler[j] = pos[{penalty[i], dead_line[i]}];
+                maximum_penalty += penalty[i];
+                break;
+            }
+            
+        }
+    }
+    
+    int final_penalty = total_penalty - maximum_penalty;
+    
+    cout << endl <<"Penalidad final: "<< final_penalty << endl;
+    
+    cout << "El scheduler que minimiza la penalidad es: " << endl;
+    
+    forr(i,1,n){
+        cout << scheduler[i] << endl;
+    }
+    
     return 0;
 }
